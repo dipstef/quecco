@@ -1,0 +1,6 @@
+*.pyc
+*.db
+.idea/**
+.DS_Store
+**@eaDir
+build
