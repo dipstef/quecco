@@ -1,4 +1,4 @@
-quelo_concurrent
+quecurr
 ================
 
-Extending the use of a a sqlite connection concurrently (thread, processes) and through file locking
+Extending the use of a a sqlite connection concurrently using (thread, processes) queue or through file locking
