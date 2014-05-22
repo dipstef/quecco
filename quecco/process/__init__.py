@@ -1,10 +1,10 @@
 from contextlib import closing
-from procol.queue.processes import ProducerConsumer
+from procol.queue.intra_processes import ProducerConsumer
 from quelo.sqlite import DbConnection, sqlite_connect
 from quelo.sqlite.connect import DbPathConnect
-from .. import ConnectionStatementsThread
 
 from .connections import Connection
+from ..queue import ConnectionStatementsThread
 from .statement import CursorId, Execute, Select, IterateSelect, CloseCursor
 
 

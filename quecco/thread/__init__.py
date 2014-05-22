@@ -1,9 +1,9 @@
 from contextlib import closing
-from procol.queue.threads import ProducerConsumer
+from procol.queue.inter_process import ProducerConsumer
 from quelo.sqlite import sqlite_connect, DbConnection
 from quelo.sqlite.connect import DbPathConnect
 from quelo.statement import Cursor
-from .. import ConnectionStatementsThread
+from ..queue import ConnectionStatementsThread
 
 from .statement import Execute, Select, IterateSelect, CloseCursor
 
