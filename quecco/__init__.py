@@ -15,3 +15,7 @@ _connections = {scope.local: quelo.connect, scope.threads: thread_connect, scope
 def connect(path, init_file=None, scope=scope.local):
     conn = _connections[scope]
     return conn(path, init_file=init_file)
+
+
+def get_connection(scope):
+    return _connections[scope]
