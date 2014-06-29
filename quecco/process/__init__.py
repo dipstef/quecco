@@ -1,5 +1,5 @@
 from contextlib import closing
-from procol.queue.intra_processes import ProducerConsumer
+from procol.queue.ipc import ProducerConsumer
 from quelo.sqlite import DbConnection, sqlite_connect
 from quelo.sqlite.connect import DbPathConnect
 
