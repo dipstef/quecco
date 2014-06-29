@@ -8,13 +8,13 @@ threads = thread_connect
 ipc = process_connect
 
 
-class Connections(object):
+class Connection(object):
     local = local
-    threads = threads
+    in_process = threads
     ipc = ipc
 
-scope = Connections()
+connection = Connection
 
 
-def connect(path, init_file=None, scope=scope.local):
+def connect(path, init_file=None, scope=connection.local):
     return scope(path, init_file=init_file)

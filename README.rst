@@ -24,9 +24,9 @@ For statements to be executed from threads in the same process
 
 .. code-block:: python
 
-    import quecco
+    from quecco import connect, threads, ipc
 
-    with quecco.connect('test.db', scope=quecco.threads) as conn:
+    with quecco.connect('test.db', scope=threads) as conn:
         ......
 
 
@@ -36,6 +36,6 @@ For statements to be executed from threads in different processes
 
     import quecco
 
-    with quecco.connect('test.db', scope=quecco.ipc) as conn:
+    with quecco.connect('test.db', scope=ipc) as conn:
         ......
 
