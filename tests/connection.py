@@ -1,42 +1,75 @@
-from quelo.query import get_value
+from quelo import get_value, get_column
+from quelo.error import UniqueColumnsConstraintViolation, PrimaryKeyViolation, TableNotExisting, ForeignKeyError
 
-from softarchive.contrib.db.connection.sqlite import db_cursor
-from quecco import thread, process
-from tests import TestDatabaseConnection
+import quecco
 
 
 def _test_connections(connect):
-    connection = TestDatabaseConnection(connect)
 
-    conn1 = connection()
-    conn2 = connection()
+    with connect('test.db', init_file='test.sql') as conn:
 
-    with db_cursor(conn1) as cursor1:
-        cursor1.execute('''create table if not exists test (value integer primary key not null)''')
+        with conn.cursor() as cursor:
+            cursor.execute('''delete from test''')
+            conn.commit()
 
-        cursor1.execute('''delete from test''')
-        conn1.commit()
+            cursor.execute('''insert into test(value) values(?) ''', (1, ))
+            conn.commit()
 
-        cursor1.execute('''insert into test(value)
-                                  values(?) ''', (1, ))
-        conn1.commit()
-    with db_cursor(conn2) as cursor2:
-        value = get_value(cursor2, '''select value
-                                        from test
-                                       where value = ?''', (1, ))
+    with connect('test.db') as conn:
+        with conn.cursor() as cursor:
+            value = get_value(cursor, '''select value
+                                            from test
+                                           where value = ?''', (1, ))
 
-        assert value == 1
-        if not value:
-            cursor2.execute('''insert into test(value)
-                                      values(?) ''', (1, ))
-    conn1.close()
-    conn2.close()
+            assert value == 1
+
+    with connect('test.db') as conn:
+        with conn.cursor() as cursor:
+            cursor.execute('''delete from full_name''')
+
+            cursor.execute('''insert into full_name(name, surname) values(?,?) ''', ('hulk', 'hogan'))
+            cursor.execute('''insert into full_name(name, surname) values(?,?) ''', ('mr', 't'))
+
+            assert get_value(cursor, 'select name from full_name where surname = ?', ('hogan', )) == 'hulk'
+
+            assert cursor.select('select name, surname from full_name') == [('hulk', 'hogan'), ('mr', 't')]
+            assert get_column(cursor, '''select name from full_name''') == ['hulk', 'mr']
+
+            try:
+                cursor.execute('''insert into full_name(name, surname)
+                                    values(?,?) ''', ('hulk', 'hogan'))
+
+            except UniqueColumnsConstraintViolation, e:
+                print e
+                assert e.columns == ['name', 'surname']
+
+            full_name_id = get_value(cursor, '''select id
+                                                  from full_name
+                                                 where name = ?
+                                                   and surname = ? ''', ('hulk', 'hogan'))
+
+            try:
+                cursor.execute('''insert into full_name(id, name, surname)
+                                    values(?,?,?) ''', (full_name_id, 'corky', 'butchek'))
+            except PrimaryKeyViolation, e:
+                print e
+
+            try:
+                cursor.execute('''insert into unknown(id) values(1)''')
+            except TableNotExisting, e:
+                print e
+
+            try:
+                cursor.execute('''insert into person(full_name_id, social_number)
+                                    values(?,?)''', (-1, 'the_hulk'))
+            except ForeignKeyError, e:
+                print e
 
 
 def main():
 
-    _test_connections(thread.connect)
-    _test_connections(process.connect)
+    _test_connections(quecco.threads)
+    _test_connections(quecco.ipc)
 
 if __name__ == '__main__':
     main()

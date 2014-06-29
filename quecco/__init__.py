@@ -3,19 +3,18 @@ from .thread import connect as thread_connect
 from .process import connect as process_connect
 
 
-def _enum(**enums):
-    return type('Enum', (), enums)
+local = quelo.connect
+threads = thread_connect
+ipc = process_connect
 
 
-scope = _enum(local='local', threads='in_process', processes='inter_process')
+class Connections(object):
+    local = local
+    threads = threads
+    ipc = ipc
 
-_connections = {scope.local: quelo.connect, scope.threads: thread_connect, scope.processes: process_connect}
+scope = Connections()
 
 
 def connect(path, init_file=None, scope=scope.local):
-    conn = _connections[scope]
-    return conn(path, init_file=init_file)
-
-
-def get_connection(scope):
-    return _connections[scope]
+    return scope(path, init_file=init_file)

@@ -1,19 +1,43 @@
-from distutils.core import setup
+#!/usr/bin/env python
 
-VERSION = '0.1'
+import os
+import sys
 
-desc = """Extending the use of a a sqlite connection concurrently using (thread, processes) queue
-or through file locking"""
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
-name = 'quecco'
+# Publish Helper.
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist upload')
+    sys.exit()
 
-setup(name=name,
-      version=VERSION,
-      author='Stefano Dipierro',
-      author_email='dipstef@github.com',
-      url='http://github.com/dipstef/{}/'.format(name),
-      description=desc,
-      packages = ['quecco', 'quecco.process', 'quecco.thread'],
-      platforms=['Any'],
-      requires=['quelo']
+CLASSIFIERS = [
+    'Intended Audience :: Developers',
+    'Natural Language :: English',
+    'License :: OSI Approved :: Apache Software License',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 2.6',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3.2',
+    'Topic :: Internet',
+    'Topic :: Utilities',
+]
+
+settings = dict(
+    name='quecco',
+    version='0.1',
+    description='sqlite3 concurrent interface',
+    long_description=open('README.rst').read(),
+    author='Stefano Dipierro',
+    license='Apache 2.0',
+    url='https://github.com/dipstef/quecco',
+    classifiers=CLASSIFIERS,
+    keywords='sqlite3 database concurrent threads process ipc',
+    packages=['quecco', 'quecco.process', 'quecco.thread'],
+    test_suite='tests',
+    requires=['quelo']
 )
+
+setup(**settings)
