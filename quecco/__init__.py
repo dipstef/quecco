@@ -7,7 +7,7 @@ def _enum(**enums):
     return type('Enum', (), enums)
 
 
-scope = _enum(local='local', threads='intra_process', processes='inter_process')
+scope = _enum(local='local', threads='in_process', processes='inter_process')
 
 _connections = {scope.local: quelo.connect, scope.threads: thread_connect, scope.processes: process_connect}
 
