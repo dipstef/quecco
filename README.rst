@@ -49,6 +49,8 @@ executing 10000 times:
 .. code-block::
     select 1
 
+Takes (seconds):
+
 .. code-block::
 
     Single Connection:   0.702931165695
