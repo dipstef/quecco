@@ -46,7 +46,7 @@ For the sake of comparison
 
 executing 10000 times:
 
-.. code-block:: sql
+.. code-block::
     select 1
 
 .. code-block::
