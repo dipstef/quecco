@@ -39,3 +39,18 @@ For statements to be executed from threads in different processes
     with quecco.connect('test.db', scope=ipc) as conn:
         ......
 
+
+Performance
+===========
+For the sake of comparison
+
+executing 10000 times:
+
+.. code-block:: sql
+    select 1
+
+.. code-block::
+
+    Single Connection:   0.702931165695
+    Threads Queue:       5.8118019104
+    Process Queue:       10.071187973
