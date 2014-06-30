@@ -46,7 +46,8 @@ For the sake of comparison
 
 executing 10000 times:
 
-.. code-block::
+.. code-block:: sql
+
     select 1
 
 Takes (seconds):
