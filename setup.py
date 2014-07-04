@@ -37,7 +37,7 @@ settings = dict(
     keywords='sqlite3 database concurrent threads process ipc',
     packages=['quecco', 'quecco.process', 'quecco.thread'],
     test_suite='tests',
-    requires=['quelo']
+    requires=['quelo', 'procol']
 )
 
 setup(**settings)

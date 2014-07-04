@@ -1,0 +1,2 @@
+git+git://github.com/dipstef/quelo.git
+git+git://github.com/dipstef/procol.git
